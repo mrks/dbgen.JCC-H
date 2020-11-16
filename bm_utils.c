@@ -155,7 +155,12 @@ yes_no(char *prompt)
 #pragma warning(default:4127)
 #endif 
         printf("%s [Y/N]: ", prompt);
-        fgets(reply, 128, stdin);
+        char* result = fgets(reply, 128, stdin);
+	if (result == NULL) {
+	    printf("Please answer 'yes' or 'no'.\n");
+	    continue;
+	}
+
         switch (*reply)
             {
             case 'y':
@@ -210,7 +215,7 @@ e_str(distribution *d, int min, int max, int stream, char *dest)
     pick_str(d, stream, strtmp);
     len = (int)strlen(strtmp);
     RANDOM(loc, 0, ((int)strlen(dest) - 1 - len), stream);
-    strncpy(dest + loc, strtmp, len);
+    memcpy(dest + loc, strtmp, len);
 
     return;
 }
